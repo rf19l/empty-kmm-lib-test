@@ -10,7 +10,7 @@ steps:
   inputs:
     versionOption: '5.x'
     maximumHeapSize: '2'
-- script: ./gradlew assemblePublixAnalyticsSdkXCFramework
+- script: ./gradlew assemble assembleTestEmptyLibXCFramework
   displayName: 'Run Gradle task'
 - script: |
     git config user.email "you@example.com"
