@@ -3,8 +3,7 @@ trigger:
     include:
       - "*"
 
-pool:
-  vmImage: 'macOS-latest'
+pool: Default
 
 steps:
 - task: Gradle@2
