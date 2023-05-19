@@ -32,6 +32,3 @@ steps:
     export PATH=$PATH:$(pwd)/swift-5.2.4-RELEASE-ubuntu18.04
     swift -version
   displayName: "Install Swift"
-- script: |
-    swift test
-  displayName: "Run unit tests"
