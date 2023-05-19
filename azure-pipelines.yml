@@ -7,7 +7,7 @@ pool:
   vmImage: 'macOS-latest'
 
 steps:
-- task: UseGradle@0
+- task: Gradle@2
   inputs:
     versionOption: '5.x'
     maximumHeapSize: '2'
