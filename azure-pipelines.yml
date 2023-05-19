@@ -23,6 +23,13 @@ steps:
     pathtoPublish: 'shared/build/out/xcframework'
     artifactName: 'XCFramework'
     publishLocation: 'Container'
+- task: UniversalPackages@0
+  inputs:
+    command: 'publish'
+    publishDirectory: 'shared/build/out/xcframework'
+    vstsFeedPublish: 'test-kmm-bridge-devops'
+    vstsPackageVersionPublish: '0.0.1'
+    
 - script: |
     sudo apt-get install clang libicu-dev
     mkdir swift-install
