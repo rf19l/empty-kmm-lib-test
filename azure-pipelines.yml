@@ -43,5 +43,5 @@ steps:
     az extension add --name azure-devops
   displayName: 'Install Azure DevOps Extension'
 - script: |
-    az artifacts universal publish --organization "https://dev.azure.com/test-kmm-bridge-devops" --project "Test KMM Pipe" --scope project --feed $(MY_FEED) --name My Swift Package --version 1.0.0 --description "My package description" --path ./spm-repo/*.xcframework
+    az artifacts universal publish --organization "https://dev.azure.com/test-kmm-bridge-devops" --project "Test KMM Pipe" --scope project --feed $(MY_FEED) --name "My Swift Package" --version 1.0.0 --description "My package description" --path ./spm-repo/*.xcframework
   displayName: 'Publish .xcframework to Azure Artifacts'
