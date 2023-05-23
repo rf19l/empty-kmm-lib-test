@@ -14,9 +14,9 @@ steps:
   displayName: 'Run Gradle task'
 - script: |
     git clone https://ryan.foster:$(MY_PAT)@dev.azure.com/test-kmm-bridge-devops/Test%20KMM%20Pipe/_git/SPM%20Repo spm-repo
-    cp -r build/spm-package/Package.swift spm-repo/
+    cp -r Package.swift spm-repo/
     # Copy your source files to the spm-repo directory as well
-    # cp -r /path/to/your/sources spm-repo/
+    # cp -r $(XcFrameworkPath) spm-repo/
     cd spm-repo
     git config user.email "you@example.com"
     git config user.name "Your Name"
@@ -33,12 +33,3 @@ steps:
     pathtoPublish: 'spm-repo'
     artifactName: 'Swift Package'
     publishLocation: 'Container'
-- script: |
-    sudo apt-get install clang libicu-dev
-    mkdir swift-install
-    cd swift-install
-    wget https://swift.org/builds/swift-5.2.4-release/ubuntu1804/swift-5.2.4-RELEASE/swift-5.2.4-RELEASE-ubuntu18.04.tar.gz
-    tar -xvzf swift-5.2.4-RELEASE*
-    export PATH=$PATH:$(pwd)/swift-5.2.4-RELEASE-ubuntu18.04
-    swift -version
-  displayName: "Install Swift"
