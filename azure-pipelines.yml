@@ -35,7 +35,7 @@ steps:
     publishLocation: 'Container'
 - script: |
     export AZURE_DEVOPS_EXT_PAT=$(MY_PAT)
-    displayName: 'Set PAT'
+  displayName: 'Set PAT'
 - script: |
     wget -qO- https://aka.ms/installazurecli | bash
   displayName: 'Install Azure CLI'
