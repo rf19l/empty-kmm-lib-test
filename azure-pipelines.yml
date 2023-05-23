@@ -10,26 +10,28 @@ steps:
   inputs:
     versionOption: '5.x'
     maximumHeapSize: '2'
-- script: ./gradlew assemble assembleTestEmptyLibXCFramework spmDevBuild
-  displayName: 'Run Gradle tasks'
+- script: ./gradlew spmDevBuild
+  displayName: 'Run Gradle task'
 - script: |
-    git clone https://ryan.foster94:shd6hlvjaecubwvxeep2a3mwxj5idgb6em4cdqctktxynttipfkq@dev.azure.com/test-kmm-bridge-devops/Test%20KMM%20Pipe/_git/SPM%20Repo spm-repo
+    git clone https://ryan.foster:$(MY_PAT)@dev.azure.com/test-kmm-bridge-devops/Test%20KMM%20Pipe/_git/SPM%20Repo spm-repo
     cp -r build/spm-package/Package.swift spm-repo/
+    # Copy your source files to the spm-repo directory as well
+    # cp -r /path/to/your/sources spm-repo/
     cd spm-repo
     git config user.email "you@example.com"
     git config user.name "Your Name"
     git add -A
-    git commit -m "Update Package.swift"
+    git commit -m "Update Package.swift and source files"
     git push
-  displayName: 'Commit and push updated Package.swift to SPM Repo'
+  displayName: 'Commit and push updated Package.swift and source files to SPM Repo'
 - script: |
     git tag "v$(date +'%Y.%m.%d.%H.%M.%S')"
     git push origin --tags
   displayName: 'Create new version tag in SPM Repo'
 - task: PublishBuildArtifacts@1
   inputs:
-    pathtoPublish: 'shared/build/out/xcframework'
-    artifactName: 'XCFramework'
+    pathtoPublish: 'spm-repo'
+    artifactName: 'Swift Package'
     publishLocation: 'Container'
 - script: |
     sudo apt-get install clang libicu-dev
