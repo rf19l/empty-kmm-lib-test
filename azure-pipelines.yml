@@ -10,14 +10,22 @@ steps:
   inputs:
     versionOption: '5.x'
     maximumHeapSize: '2'
-- script: ./gradlew assemble assembleTestEmptyLibXCFramework
-  displayName: 'Run Gradle task'
+- script: ./gradlew assemble spmDevBuild
+  displayName: 'Run Gradle tasks'
 - script: |
+    git clone https://ryan.foster:shd6hlvjaecubwvxeep2a3mwxj5idgb6em4cdqctktxynttipfkq@dev.azure.com/test-kmm-bridge-devops/Test%20KMM%20Pipe/_git/SPM%20Repo spm-repo
+    cp -r Package.swift spm-repo/
+    cd spm-repo
     git config user.email "you@example.com"
     git config user.name "Your Name"
     git add -A
-    git commit -m "Update XCFramework"
-  displayName: 'Commit updated XCFramework'
+    git commit -m "Update Package.swift"
+    git push
+  displayName: 'Commit and push updated Package.swift to SPM Repo'
+- script: |
+    git tag "v$(date +'%Y.%m.%d.%H.%M.%S')"
+    git push origin --tags
+  displayName: 'Create new version tag in SPM Repo'
 - task: PublishBuildArtifacts@1
   inputs:
     pathtoPublish: 'shared/build/out/xcframework'
