@@ -15,8 +15,8 @@ steps:
 - script: |
     git clone https://ryan.foster:$(MY_PAT)@dev.azure.com/test-kmm-bridge-devops/Test%20KMM%20Pipe/_git/SPM%20Repo spm-repo
     cp -r build/spm-package/Package.swift spm-repo/
-    # Copy your source files to the spm-repo directory as well
-    # cp -r /path/to/your/sources spm-repo/
+    # Copy your source files to the spm-repo directory
+    cp -r $(XcFrameworkPath) spm-repo/
     cd spm-repo
     git config user.email "you@example.com"
     git config user.name "Your Name"
