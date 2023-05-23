@@ -13,7 +13,7 @@ steps:
 - script: ./gradlew spmDevBuild
   displayName: 'Run Gradle task'
 - script: |
-    git clone https://ryan.foster:$(MY_PAT)@dev.azure.com/test-kmm-bridge-devops/Test%20KMM%20Pipe/_git/SPM%20Repo spm-repo
+    git clone https://ryan.foster94:$(MY_PAT)@dev.azure.com/test-kmm-bridge-devops/Test%20KMM%20Pipe/_git/SPM%20Repo spm-repo
     cp -r Package.swift spm-repo/
     # Copy your source files to the spm-repo directory as well
     # cp -r $(XcFrameworkPath) spm-repo/
