@@ -13,7 +13,7 @@ steps:
 - script: ./gradlew assemble assembleTestEmptyLibXCFramework spmDevBuild
   displayName: 'Run Gradle tasks'
 - script: |
-    git clone https://ryan.foster:shd6hlvjaecubwvxeep2a3mwxj5idgb6em4cdqctktxynttipfkq@dev.azure.com/test-kmm-bridge-devops/Test%20KMM%20Pipe/_git/SPM%20Repo spm-repo
+    git clone https://ryan.foster94:shd6hlvjaecubwvxeep2a3mwxj5idgb6em4cdqctktxynttipfkq@dev.azure.com/test-kmm-bridge-devops/Test%20KMM%20Pipe/_git/SPM%20Repo spm-repo
     cp -r build/spm-package/Package.swift spm-repo/
     cd spm-repo
     git config user.email "you@example.com"
