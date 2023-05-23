@@ -10,33 +10,38 @@ steps:
   inputs:
     versionOption: '5.x'
     maximumHeapSize: '2'
-- script: ./gradlew assemble spmDevBuild
-  displayName: 'Run Gradle tasks'
+- script: ./gradlew spmDevBuild
+  displayName: 'Run Gradle task'
 - script: |
-    git clone https://ryan.foster:shd6hlvjaecubwvxeep2a3mwxj5idgb6em4cdqctktxynttipfkq@dev.azure.com/test-kmm-bridge-devops/Test%20KMM%20Pipe/_git/SPM%20Repo spm-repo
-    cp -r Package.swift spm-repo/
+    git clone https://ryan.foster:$(MY_PAT)@dev.azure.com/test-kmm-bridge-devops/Test%20KMM%20Pipe/_git/SPM%20Repo spm-repo
+    cp -r build/spm-package/Package.swift spm-repo/
+    # Copy your source files to the spm-repo directory as well
+    # cp -r /path/to/your/sources spm-repo/
     cd spm-repo
     git config user.email "you@example.com"
     git config user.name "Your Name"
     git add -A
-    git commit -m "Update Package.swift"
+    git commit -m "Update Package.swift and source files"
     git push
-  displayName: 'Commit and push updated Package.swift to SPM Repo'
+  displayName: 'Commit and push updated Package.swift and source files to SPM Repo'
 - script: |
     git tag "v$(date +'%Y.%m.%d.%H.%M.%S')"
     git push origin --tags
   displayName: 'Create new version tag in SPM Repo'
 - task: PublishBuildArtifacts@1
   inputs:
-    pathtoPublish: 'shared/build/out/xcframework'
-    artifactName: 'XCFramework'
+    pathtoPublish: 'spm-repo'
+    artifactName: 'Swift Package'
     publishLocation: 'Container'
 - script: |
-    sudo apt-get install clang libicu-dev
-    mkdir swift-install
-    cd swift-install
-    wget https://swift.org/builds/swift-5.2.4-release/ubuntu1804/swift-5.2.4-RELEASE/swift-5.2.4-RELEASE-ubuntu18.04.tar.gz
-    tar -xvzf swift-5.2.4-RELEASE*
-    export PATH=$PATH:$(pwd)/swift-5.2.4-RELEASE-ubuntu18.04
-    swift -version
-  displayName: "Install Swift"
+    wget -qO- https://aka.ms/installazurecli | bash
+  displayName: 'Install Azure CLI'
+- script: |
+    az extension add --name azure-devops
+  displayName: 'Install Azure DevOps Extension'
+- script: |
+    az login --service-principal --username $(ServicePrincipalId) --password $(ServicePrincipalKey) --tenant $(TenantId)
+  displayName: 'Login to Azure CLI'
+- script: |
+    az artifacts universal publish --organization "https://dev.azure.com/test-kmm-bridge-devops" --project "Test KMM Pipe" --scope project --feed $(MY_FEED) --name MyPackage --version 1.0.0 --description "My package description" --path ./spm-repo/*.xcframework
+  displayName: 'Publish .xcframework to Azure Artifacts'
