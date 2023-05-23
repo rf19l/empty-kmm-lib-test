@@ -13,10 +13,10 @@ steps:
 - script: ./gradlew spmDevBuild
   displayName: 'Run Gradle task'
 - script: |
-    git clone https://$(MY_PAT)@dev.azure.com/test-kmm-bridge-devops/Test%20KMM%20Pipe/_git/SPM%20Repo spm-repo
-    cp -r Package.swift spm-repo/
+    git clone https://ryan.foster:$(MY_PAT)@dev.azure.com/test-kmm-bridge-devops/Test%20KMM%20Pipe/_git/SPM%20Repo spm-repo
+    cp -r build/spm-package/Package.swift spm-repo/
     # Copy your source files to the spm-repo directory as well
-    cp -r $(XcFrameworkPath) spm-repo/
+    # cp -r /path/to/your/sources spm-repo/
     cd spm-repo
     git config user.email "you@example.com"
     git config user.name "Your Name"
@@ -33,3 +33,15 @@ steps:
     pathtoPublish: 'spm-repo'
     artifactName: 'Swift Package'
     publishLocation: 'Container'
+- script: |
+    wget -qO- https://aka.ms/installazurecli | bash
+  displayName: 'Install Azure CLI'
+- script: |
+    az extension add --name azure-devops
+  displayName: 'Install Azure DevOps Extension'
+- script: |
+    az login --service-principal --username $(ServicePrincipalId) --password $(ServicePrincipalKey) --tenant $(TenantId)
+  displayName: 'Login to Azure CLI'
+- script: |
+    az artifacts universal publish --organization "https://dev.azure.com/test-kmm-bridge-devops" --project "Test KMM Pipe" --scope project --feed $(MY_FEED) --name MyPackage --version 1.0.0 --description "My package description" --path ./spm-repo/*.xcframework
+  displayName: 'Publish .xcframework to Azure Artifacts'
