@@ -1,6 +1,8 @@
 plugins {
     kotlin("multiplatform")
     id("com.android.library")
+    id("co.touchlab.faktory.kmmbridge") version "0.3.7"
+    `maven-publish`
 }
 
 kotlin {
@@ -18,7 +20,7 @@ kotlin {
         iosSimulatorArm64()
     ).forEach {
         it.binaries.framework {
-            baseName = "shared"
+            baseName = "PublixAnalyticsLogger"
         }
     }
 
@@ -66,4 +68,13 @@ kotlinArtifacts{
             project(":shared")
         )
     }
+}
+//addGithubPackagesRepository()
+
+
+kmmbridge {
+    mavenPublishArtifacts()
+    spm()
+    versionPrefix.set("0.1")
+    timestampVersions()
 }
