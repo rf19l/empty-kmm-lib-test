@@ -2,8 +2,8 @@
 import PackageDescription
 
 // BEGIN KMMBRIDGE VARIABLES BLOCK (do not edit)
-let remoteKotlinUrl = "https://pkgs.dev.azure.com/ryanjfoster94/_packaging/ryanjfoster94/maven/v1/empty-kmm-lib-test/shared-kmmbridge/0.1.5/shared-kmmbridge-0.1.5.zip"
-let remoteKotlinChecksum = "52bd72c9ede724abdf2c1368e6c90bf84d1a95839a367781e8f3d8e07ad6f8ba"
+let remoteKotlinUrl = "https://pkgs.dev.azure.com/ryanjfoster94/_packaging/ryanjfoster94/maven/v1/com/publix/shared-kmmbridge/0.1.6/shared-kmmbridge-0.1.6.zip"
+let remoteKotlinChecksum = "aa39b6bdaea198e060fe2a962efa664b7dea796ec4039312d1ee4fd1a99f3830"
 let packageName = "PublixAnalyticsLogger"
 // END KMMBRIDGE BLOCK
 
