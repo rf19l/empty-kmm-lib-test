@@ -7,3 +7,6 @@ plugins {
 tasks.register("clean", Delete::class) {
     delete(rootProject.buildDir)
 }
+version = "0.0.1"
+group = "PAL"
+

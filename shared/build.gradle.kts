@@ -1,8 +1,25 @@
+import co.touchlab.faktory.versionmanager.TimestampVersionManager
+
 plugins {
     kotlin("multiplatform")
     id("com.android.library")
     id("co.touchlab.faktory.kmmbridge") version "0.3.7"
     `maven-publish`
+}
+publishing {
+    // Externally set these values. Generally ~/.gradle/gradle.properties or CI Secrets
+    /*    val publishUsername: String by project
+    val publishPassword: String by project*/
+    val myPAT:String by project
+    repositories {
+        maven {
+            url = uri("https://pkgs.dev.azure.com/ryanjfoster94/_packaging/ryanjfoster94/maven/v1")
+            credentials {
+                username = "ryan.foster94"
+                password =myPAT
+            }
+        }
+    }
 }
 
 kotlin {
@@ -73,8 +90,9 @@ kotlinArtifacts{
 
 
 kmmbridge {
-    mavenPublishArtifacts()
-    spm()
+    //version = "1"
+    gitTagVersions()
     versionPrefix.set("0.1")
-    timestampVersions()
+    spm()
+    mavenPublishArtifacts()
 }
