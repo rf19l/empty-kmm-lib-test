@@ -3,46 +3,27 @@ trigger:
     include:
       - "*"
 
-pool: Default
+pool: 
+  vmImage: 'macOs-latest'
 
 steps:
+- checkout: self
+  fetchDepth: 0
+- script: git checkout master
+
+
+- script: |
+    echo API_KEY=$(API_KEY) >> secure.properties
+    echo JWT_TOKEN=$(JWT_TOKEN) >> secure.properties
+    echo CLIENT_SECRET=$(CLIENT_SECRET) >> secure.properties
+    echo DATA_STREAM_ID=$(DATA_STREAM_ID) >> secure.properties
+    echo IMS=$(IMS) >> secure.properties
+  displayName: 'Generate secure.properties'
 - task: Gradle@2
   inputs:
-    versionOption: '5.x'
-    maximumHeapSize: '2'
-- script: ./gradlew spmDevBuild
-  displayName: 'Run Gradle task'
+   gradleWrapperFile: 'gradlew'
+   jdkVersionOption: '1.17'
 - script: |
-    git clone https://ryan.foster:$(MY_PAT)@dev.azure.com/test-kmm-bridge-devops/Test%20KMM%20Pipe/_git/SPM%20Repo spm-repo
-    cp -r build/spm-package/Package.swift spm-repo/
-    # Copy your source files to the spm-repo directory
-    cp -r $(XcFrameworkPath) spm-repo/
-    cd spm-repo
-    git config user.email "you@example.com"
-    git config user.name "Your Name"
-    git add -A
-    git commit -m "Update Package.swift and source files"
-    git push
-  displayName: 'Commit and push updated Package.swift and source files to SPM Repo'
-- script: |
-    git tag "v$(date +'%Y.%m.%d.%H.%M.%S')"
-    git push origin --tags
-  displayName: 'Create new version tag in SPM Repo'
-- task: PublishBuildArtifacts@1
-  inputs:
-    pathtoPublish: 'spm-repo'
-    artifactName: 'Swift Package'
-    publishLocation: 'Container'
-- script: |
-    export AZURE_DEVOPS_EXT_PAT=$(MY_PAT)
-  displayName: 'Set PAT'
-- script: |
-    wget -qO- https://aka.ms/installazurecli | bash
-  displayName: 'Install Azure CLI'
-- script: |
-    az extension add --name azure-devops
-  displayName: 'Install Azure DevOps Extension'
-- script: |
-    az artifacts universal publish --organization "https://dev.azure.com/test-kmm-bridge-devops/" --feed "test-kmm-bridge-devops" --name "my-swift-package" --version "0.1.0" --description "This is a test Swift package" --path ./spm-repo/*.xcframework
-  displayName: 'Publish .xcframework to Azure Artifacts'
-
+    ./gradlew -PENABLE_PUBLISHING=true publishPublixAnalytics-androidPublicationToMavenRepository
+    ./gradlew -PENABLE_PUBLISHING=true kmmBridgePublish
+  displayName: 'Publish android and ios libraries'
